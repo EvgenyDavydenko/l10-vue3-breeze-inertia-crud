@@ -1,0 +1,46 @@
+
+services:
+    php82cli:
+        build: ./
+        container_name: laravel-php82cli-bookworm
+        restart: always
+        working_dir: /var/www/html
+        ports:
+            - 8000:8000
+            - 5173:5173 #package.json "scripts": {"dev": "vite --host"}
+        links:
+            - database
+        volumes:
+            - ./:/var/www/html
+        tty: true
+        # php -S php82cli:8000 -t public
+        # php artisan serve --host php82cli
+    database:
+        image: mariadb:11.2-jammy
+        container_name: mariadb-jammy
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: root_pass
+            MYSQL_DATABASE: laravel
+            MYSQL_USER: phpmyadmin
+            MYSQL_PASSWORD: phpmyadmin
+    phpmyadmin:
+        image: phpmyadmin:5.2-apache
+        container_name: phpmyadmin-buster
+        restart: always
+        links:
+            - database
+        ports:
+            - 8001:80
+        environment:
+            PMA_HOST: database
+            PMA_USER: phpmyadmin
+            PMA_PASSWORD: phpmyadmin
+    mailpit:
+        image: axllent/mailpit
+        container_name: mailpit
+        restart: always
+        ports:
+            - 1025:1025 # smtp server
+            - 8025:8025 # web ui
+        
