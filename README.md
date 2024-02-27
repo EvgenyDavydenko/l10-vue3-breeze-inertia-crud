@@ -7,3 +7,4 @@ composer create-project laravel/laravel l10-vue3-breeze-inertia
 composer require laravel/breeze --dev
 php artisan breeze:install vue
 ```
+3. Create simple CRUD App with API and SPA
